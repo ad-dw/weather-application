@@ -1,9 +1,20 @@
 import React, { useState } from "react";
 import Suggestions from "./Suggestions/Suggestions";
+import { City } from "../../types/types";
 
 const baseUrl = "https://geocoding-api.open-meteo.com/v1/search";
 
-const SearchBar = ({ suggestions, setSelectedCity, setSuggestions }) => {
+interface SearchBarProps {
+  suggestions: City[];
+  setSelectedCity: (city: City) => void;
+  setSuggestions: (suggestions: City[]) => void;
+}
+
+const SearchBar = ({
+  suggestions,
+  setSelectedCity,
+  setSuggestions,
+}: SearchBarProps) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,13 +26,15 @@ const SearchBar = ({ suggestions, setSelectedCity, setSuggestions }) => {
       setLoading(true);
       const res = await fetch(
         `${baseUrl}?name=${encodeURIComponent(
-          value
-        )}&count=5&language=en&format=json`
+          value,
+        )}&count=5&language=en&format=json`,
       );
       const data = await res.json();
       setSuggestions(data.results);
-    } catch (e) {
-      console.log(e.message);
+    } catch (e: Error | unknown) {
+      console.log(
+        e instanceof Error ? e.message : "Error fetching suggestions",
+      );
     } finally {
       setLoading(false);
     }

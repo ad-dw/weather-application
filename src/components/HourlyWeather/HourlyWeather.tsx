@@ -1,4 +1,14 @@
-const HourlyWeather = ({ hourlyData }) => {
+interface HourlyWeatherProps {
+  hourlyData: {
+    time: string;
+    icon: string;
+    temp: string;
+    humidity: string;
+    windSpeed: string;
+  }[];
+}
+
+const HourlyWeather = ({ hourlyData }: HourlyWeatherProps) => {
   return (
     <div className="w-full">
       <div className="m-4 backdrop-blur bg-white/20 p-2 rounded-lg shadow-lg">

@@ -1,8 +1,12 @@
 import { getWeatherIcon, getWeatherDescription } from "../../utils/weather.js";
 import HumidityCard from "../HumidityCard/HumidityCard.js";
 import WindSpeedCard from "../WindSpeedCard/WindSpeedCard.js";
+import { CurrentData } from "../../types/types.js";
+interface CurrentWeatherProps {
+  currentWeatherData: CurrentData;
+}
 
-const CurrentWeather = ({ currentWeatherData }) => {
+const CurrentWeather = ({ currentWeatherData }: CurrentWeatherProps) => {
   const weatherIcon = getWeatherIcon(currentWeatherData?.weatherCode);
   const description = getWeatherDescription(currentWeatherData?.weatherCode);
   return (

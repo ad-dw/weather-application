@@ -6,20 +6,31 @@ import {
   getCurrentWeatherDatainFormat,
   getHourlyWeatherDatainFormat,
   getForecastData,
-} from "./utils/weather.js";
+} from "./utils/weather.ts";
 import HourlyWeather from "./components/HourlyWeather/HourlyWeather.js";
 import Forecast from "./components/Forecast/Forecast.js";
 import Spinner from "./components/Spinner/Spinner.js";
+import {
+  City,
+  WeatherData,
+  ForecastData,
+  HourData,
+  CurrentData,
+} from "./types/types";
 
 const baseUrl = "https://api.open-meteo.com/v1/forecast";
 
 function App() {
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [suggestions, setSuggestions] = useState([]);
-  const [data, setData] = useState(null);
-  const [currentWeather, setCurrentWeather] = useState(null);
-  const [hourlyWeatherData, setHourlyWeatherData] = useState(null);
-  const [forecastData, setForecastData] = useState(null);
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
+  const [suggestions, setSuggestions] = useState<City[]>([]);
+  const [data, setData] = useState<WeatherData | null>(null);
+  const [currentWeather, setCurrentWeather] = useState<CurrentData | null>(
+    null,
+  );
+  const [hourlyWeatherData, setHourlyWeatherData] = useState<HourData[] | null>(
+    null,
+  );
+  const [forecastData, setForecastData] = useState<ForecastData[] | null>(null);
   const [isDataLoading, setIsDataLoading] = useState(false);
 
   useEffect(() => {
@@ -28,8 +39,8 @@ function App() {
         if (!selectedCity) return;
         setIsDataLoading(true);
         const params = new URLSearchParams({
-          latitude: selectedCity.latitude,
-          longitude: selectedCity.longitude,
+          latitude: selectedCity.latitude.toString(),
+          longitude: selectedCity.longitude.toString(),
           current:
             "apparent_temperature,temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code",
           daily: "temperature_2m_max,temperature_2m_min,weather_code",
@@ -44,13 +55,13 @@ function App() {
         setData({ ...weatherData, location: selectedCity });
       };
       getWeatherData();
-    } catch (e) {
-      console.log(e.message);
+    } catch (error: unknown) {
+      console.log(error);
     }
   }, [selectedCity]);
 
   useEffect(() => {
-    if (!data && !data?.current && !data?.hourly) return;
+    if (!data) return;
     const currentData = getCurrentWeatherDatainFormat(data);
     const hourlyData = getHourlyWeatherDatainFormat(data);
     const forecastingData = getForecastData(data);
@@ -73,11 +84,13 @@ function App() {
           <Spinner color={"white"} />
         </div>
       )}
-      {data && <CurrentWeather currentWeatherData={currentWeather} />}
-      {hourlyWeatherData?.length > 0 && (
+      {currentWeather && <CurrentWeather currentWeatherData={currentWeather} />}
+      {hourlyWeatherData && hourlyWeatherData?.length > 0 && (
         <HourlyWeather hourlyData={hourlyWeatherData} />
       )}
-      {forecastData?.length > 0 && <Forecast forecastData={forecastData} />}
+      {forecastData && forecastData?.length > 0 && (
+        <Forecast forecastData={forecastData} />
+      )}
     </main>
   );
 }
