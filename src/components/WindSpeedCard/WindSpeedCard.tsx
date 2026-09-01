@@ -1,4 +1,7 @@
-const WindSpeedCard = ({ windSpeed }) => {
+interface WindSpeedCardProps {
+  windSpeed: string;
+}
+const WindSpeedCard = ({ windSpeed }: WindSpeedCardProps) => {
   return (
     <div className="bg-white/30 rounded-lg p-2">
       <div className="flex gap-2 items-center text-sm">

@@ -1,4 +1,19 @@
+import { Dispatch, SetStateAction } from "react";
+import { City } from "../../../types/types";
 import Spinner from "../../Spinner/Spinner";
+
+interface SuggestionsProps {
+  suggestions: {
+    name: string;
+    country: string;
+    latitude: number;
+    longitude: number;
+  }[];
+  setSelectedCity: (city: City) => void;
+  setQuery: Dispatch<SetStateAction<string>>;
+  setSuggestions: (suggestions: City[]) => void;
+  loading: boolean;
+}
 
 const Suggestions = ({
   suggestions,
@@ -6,8 +21,8 @@ const Suggestions = ({
   setQuery,
   setSuggestions,
   loading,
-}) => {
-  const handleSuggestionClick = (city) => {
+}: SuggestionsProps) => {
+  const handleSuggestionClick = (city: City) => {
     const cityInfo = {
       name: city.name,
       country: city.country,

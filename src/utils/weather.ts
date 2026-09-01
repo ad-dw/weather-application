@@ -1,4 +1,6 @@
-const weatherDescription = {
+import { WeatherData } from "../types/types";
+
+const weatherDescription: Record<number, string> = {
   0: "Clear sky",
   1: "Mainly clear",
   2: "Partly cloudy",
@@ -29,7 +31,7 @@ const weatherDescription = {
   99: "Thunderstorm with heavy hail",
 };
 
-const weatherIcons = {
+const weatherIcons: Record<number, string> = {
   0: "☀️", // Clear sky
   1: "🌤️", // Mainly clear
   2: "⛅", // Partly cloudy
@@ -70,12 +72,13 @@ const dayNames = [
   "Saturday",
 ];
 
-export const getWeatherDescription = (code) =>
-  weatherDescription[code] || "Unknown";
+export const getWeatherDescription = (code: number | undefined) =>
+  (code && weatherDescription[code]) || "Unknown";
 
-export const getWeatherIcon = (code) => weatherIcons[code] || "?";
+export const getWeatherIcon = (code: number | undefined) =>
+  (code && weatherIcons[code]) || "?";
 
-export const getCurrentWeatherDatainFormat = (data) => {
+export const getCurrentWeatherDatainFormat = (data: WeatherData) => {
   let currentData = {
     city: data?.location?.name || "",
     country: data?.location?.country || "",
@@ -101,7 +104,7 @@ export const getCurrentWeatherDatainFormat = (data) => {
   return currentData;
 };
 
-export const getHourlyWeatherDatainFormat = (data) => {
+export const getHourlyWeatherDatainFormat = (data: WeatherData) => {
   let hourlyData = [];
   for (let i = 0; i < 24; i++) {
     const hourData = {
@@ -123,7 +126,7 @@ export const getHourlyWeatherDatainFormat = (data) => {
   return hourlyData;
 };
 
-export const getForecastData = (data) => {
+export const getForecastData = (data: WeatherData) => {
   const dailyWeatherData = [];
   for (let i = 1; i < 7; i++) {
     const dailyData = {

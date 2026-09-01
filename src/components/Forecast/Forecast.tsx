@@ -1,4 +1,14 @@
-const Forecast = ({ forecastData }) => {
+interface ForecastProps {
+  forecastData: {
+    day: string;
+    icon: string;
+    minTemp: string;
+    maxTemp: string;
+    desc: string;
+  }[];
+}
+
+const Forecast = ({ forecastData }: ForecastProps) => {
   return (
     <div className="w-full py-2 px-6">
       <h2 className="text-3xl font-bold mb-4 px-4">6-Day Forecast</h2>
